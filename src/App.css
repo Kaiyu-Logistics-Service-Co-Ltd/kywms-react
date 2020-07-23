@@ -1,6 +1,3 @@
-.site-layout .site-layout-background {
-    background: #fff;
-}
 .trigger {
     font-size: 18px;
     line-height: 64px;
@@ -12,6 +9,11 @@
 .trigger:hover {
     color: #1890ff;
 }
+
+.site-layout .site-layout-background {
+    background: #fff;
+}
+
 .site-layout .site-layout-background {
     background: #fff;
 }

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import 'antd/dist/antd.css';
 import PubSub from "pubsub-js"
-import './companyName.css'
+import './CompanyName.css'
 export default class CompanyName extends Component {
 
   state = {
@@ -16,7 +16,7 @@ export default class CompanyName extends Component {
     const {logoFlag} = this.state;
     if (logoFlag){
       return (
-        <h1 >凯 宇 物 流</h1>
+        <h1 id="companyName">凯 宇 物 流</h1>
       );
     }else {
       return null;
