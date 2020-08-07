@@ -25,7 +25,8 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "store": "^2.0.12"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -52,5 +53,6 @@
     "less": "^3.12.2",
     "less-loader": "^6.2.0",
     "redux-devtools-extension": "^2.13.8"
-  }
+  },
+  "proxy": "http://localhost:10086"
 }

@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import 'antd/dist/antd.css';
 import PubSub from "pubsub-js"
-import './CompanyName.css'
+import './CompanyName.less'
 export default class CompanyName extends Component {
 
   state = {

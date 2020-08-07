@@ -14,6 +14,5 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(thunk)) //应用异步中间件
 );
 //内部会第一次调用reducer函数得到初始state
-console.log(store);
 
 export default store;
