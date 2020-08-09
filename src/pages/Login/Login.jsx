@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import { message,Tooltip, Skeleton,Form, Input, Button, Checkbox,Row, Col } from 'antd';
+import { message,Form, Input, Button, Checkbox,Row, Col } from 'antd';
 import { UserOutlined, LockOutlined,WechatOutlined,WeiboOutlined,QqOutlined} from '@ant-design/icons';
 import "./Login.less"
 import logo from "./images/logo_tinycirclex.png"
@@ -34,6 +34,7 @@ export default class Login extends Component{
     console.log("Successful",response);
     if (response.code===200){
       const user = response.data
+      storageUtils.removeUser();
       storageUtils.saveUser(user);
       memoryUtils.user_key = storageUtils.getUser();
       message.success(response.message);

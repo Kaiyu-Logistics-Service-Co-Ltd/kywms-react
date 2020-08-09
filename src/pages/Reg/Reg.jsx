@@ -1,171 +1,201 @@
 import React,{Component} from "react";
-import {Form, Input, Button, Checkbox, message} from 'antd';
-import { UserOutlined, LockOutlined,BarcodeOutlined } from '@ant-design/icons';
+import {Form, Input, Button, message, Select} from 'antd';
+import { UserOutlined, LockOutlined,BarcodeOutlined} from '@ant-design/icons';
 import "./Reg.less"
 import logo from "./images/logo_tinycirclex.png"
-import {reqAddUser} from "../../api/";
-
+import {reqAddUser,reqCheckIfTheUserCodeExists, reqUserRoleList} from "../../api/";
+import MyIcon from "../../assets/icon/myIcon";
+import {reqDepartmentList} from "../../api";
 /**
  * 添加用户路由组件
  */
 
-
+const { Option } = Select;
 export default class Reg extends Component{
 
   state = {
-    userCode:"",
-    userPassword:"",
-    userRepeatPassword:"",
-    userName:"",
-    userCodeItem:{},
-    userPasswordItem:{},
-    userRepeatPasswordItem:{},
-    userNameItem:{
+    userCodeItem:{
+      value:"",
       validateStatus:"validating",
-      tip:""
+      hasFeedback: false,
     },
+    userPasswordItem:{
+      value:"",
+      validateStatus:"validating",
+      hasFeedback: false,
+    },
+    userRepeatPasswordItem:{
+      value:"",
+      validateStatus:"validating",
+      hasFeedback: false,
+    },
+    userNameItem:{
+      value:"",
+      validateStatus:"validating",
+      hasFeedback: false,
+    },
+    userRoleList: [{}],
+    departmentList: [{}],
+  }
+  async componentDidMount() {
+    const requestUserRoleList = await reqUserRoleList();
+    if (requestUserRoleList.code===200){
+      const userRoleList = requestUserRoleList.data;
+      this.setState({userRoleList});
+    }else if (requestUserRoleList.code===404){
+      this.setState({userRoleList: [{userRoleId:0,userRoleName:requestUserRoleList.message},]});
+    }
+    const requestDepartmentList = await reqDepartmentList();
+    if (requestDepartmentList.code===200){
+      const departmentList = requestDepartmentList.data;
+      this.setState({departmentList});
+    }else if (requestDepartmentList.code===404){
+      this.setState({departmentList: [{departmentId:0,departmentName:requestDepartmentList.message},]});
+    }
   }
 
-  onFinish = values => {
-    console.log('Received values of form: ', values);
-    const {userCode,userName,userPassword,userRepeatPassword} = values
 
-    // reqAddUser()
+  onFinish = async values => {
+    console.log(values)
+    const {userCode,userName,userPassword,userRepeatPassword,userRoleId,departmentId} = values
+    this.userCodeValidate(userCode);
+    this.userPasswordValidate(userPassword);
+    this.userNameValidate(userName);
+    this.userRepeatPasswordValidate(userRepeatPassword);
+    const {userCodeItem,userNameItem,userPasswordItem,userRepeatPasswordItem} = this.state;
+    if (userCodeItem.validateStatus==="success"){
+      if (userPasswordItem.validateStatus==="success"){
+        if (userRepeatPasswordItem.validateStatus==="success"){
+          if (userNameItem.validateStatus==="success"){
+            if (userRoleId===0){
+              message.error("没有角色可选择,请先添加角色");
+            }else {
+              const request = await reqAddUser(userCode,userPassword,userName,userRoleId,departmentId);
+              console.log(request);
+            }
+          }
+        }
+      }
+    }
   };
-  onFormFieldsChange = (changedFields,allFields)=> {
-    // console.log(allFields);
-    // let userCodeItem,userPasswordItem,userRepeatPasswordItem,userNameItem;
-    // allFields.map((field,index)=>{
-    //   if (index===0&&field.name[0]==="userCode"&&field.touched===true){
-    //     console.log(field,index);
-    //   }
-    // })
-  }
-
   onUserCodeChange=(event)=>{
-    // console.log(event.target.value);
     const value = event.target.value;
-    this.setState({userName:event.target.value})
-    if(value.length<=1){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名必须大于1位!"
-        }
-      });
-    }else if(value.length>=24){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名不能超过24位!"
-        }
-      });
-    }else if(!/^[A-Za-z0-9_\-\u4e00-\u9fa5]+$/.test(value)){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名必须为字母、数字、下划线或中文汉字组成!"
-        }
-      });
-    }
-    else {
-      this.setState({userNameItem:{validateStatus:"validating"}});
-    }
+    this.userCodeValidate(value);
   }
   onUserPasswordChange=(event)=>{
-    // console.log(event.target.value);
     const value = event.target.value;
-    this.setState({userName:event.target.value})
-    if(value.length<=1){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名必须大于1位!"
-        }
-      });
-    }else if(value.length>=24){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名不能超过24位!"
-        }
-      });
-    }else if(!/^[A-Za-z0-9_\-\u4e00-\u9fa5]+$/.test(value)){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名必须为字母、数字、下划线或中文汉字组成!"
-        }
-      });
-    }
-    else {
-      this.setState({userNameItem:{validateStatus:"validating"}});
-    }
+    this.userPasswordValidate(value);
   }
-  onuserRepeatPasswordChange=(event)=>{
-    // console.log(event.target.value);
+  onUserRepeatPasswordChange=(event)=>{
     const value = event.target.value;
-    this.setState({userName:event.target.value})
-    if(value.length<=1){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名必须大于1位!"
-        }
-      });
-    }else if(value.length>=24){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名不能超过24位!"
-        }
-      });
-    }else if(!/^[A-Za-z0-9_\-\u4e00-\u9fa5]+$/.test(value)){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名必须为字母、数字、下划线或中文汉字组成!"
-        }
-      });
-    }
-    else {
-      this.setState({userNameItem:{validateStatus:"validating"}});
-    }
+    this.userRepeatPasswordValidate(value)
   }
   onUserNameChange=(event)=>{
-    // console.log(event.target.value);
     const value = event.target.value;
-    this.setState({userName:event.target.value})
-    if(value.length<=1){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名必须大于1位!"
-        }
-      });
-    }else if(value.length>=24){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名不能超过24位!"
-        }
-      });
-    }else if(!/^[A-Za-z0-9_\-\u4e00-\u9fa5]+$/.test(value)){
-      this.setState({
-        userNameItem:{
-          validateStatus:"error",
-          tip:"姓名必须为字母、数字、下划线或中文汉字组成!"
-        }
-      });
+    this.userNameValidate(value);
+  }
+
+  userCodeValidate = async(value)=>{
+    let validateStatus,help,hasFeedback=true;
+    if (!value){
+      validateStatus="error"
+      help="请输入您的用户名!"
+    }else if(value.length<4){
+      validateStatus="error"
+      help="用户名必须大于4位!"
+    }else if(value.length>16){
+      validateStatus="error"
+      help="用户名不能超过16位!"
+    }else if(!/^[A-Za-z0-9_]+$/.test(value)){
+      validateStatus="error"
+      help="用户名必须为字母、数字或下划线组成!"
     }
     else {
-      this.setState({userNameItem:{validateStatus:"validating"}});
+      const request = await reqCheckIfTheUserCodeExists(value);
+      const {code,message} = request;
+      console.log(request);
+      if (code===200){
+        validateStatus="success";
+        help=message;
+      }else if(code===204){
+        validateStatus="error";
+        help=message;
+      }else {
+        validateStatus="error";
+        help=message;
+      }
     }
+    this.setState({userCodeItem:{value,validateStatus,help,hasFeedback}});
+  }
+  userPasswordValidate = (value)=>{
+    let validateStatus,help,hasFeedback=true;
+    if (!value){
+      validateStatus="error"
+      help="请输入您的密码!"
+    }else if(value.length<6){
+      validateStatus="error"
+      help="密码必须大于6位!"
+    }else if(value.length>32){
+      validateStatus="error"
+      help="密码不能超过32位!"
+    }else {
+      validateStatus="success";
+    }
+    this.setState({userPasswordItem:{value,validateStatus,help,hasFeedback}});
+  }
+  userRepeatPasswordValidate = (value)=>{
+    const {userPasswordItem} = this.state;
+    let validateStatus,help="",hasFeedback=true;
+    if (userPasswordItem.validateStatus==="success"){
+      if (!value){
+        validateStatus="error"
+        help="请重复输入您的密码!"
+      }else if(value===userPasswordItem.value){
+        validateStatus="success";
+      }else {
+        validateStatus="error"
+        help="重复密码不一致!"
+      }
+    }else {
+      validateStatus="error"
+      help="密码格式不正确!"
+    }
+    this.setState({userRepeatPasswordItem:{value,validateStatus,help,hasFeedback}});
+  }
+  userNameValidate = (value)=>{
+    let validateStatus,help,hasFeedback=true;
+    if (!value){
+      validateStatus="error"
+      help="请输入您的姓名!"
+    }else if(value.length<=1){
+      validateStatus="error"
+      help="姓名必须大于1位!"
+    }else if(value.length>16){
+      validateStatus="error"
+      help="姓名不能超过16位!"
+    }else if(!/^[A-Za-z0-9_\-\u4e00-\u9fa5]+$/.test(value)){
+      validateStatus="error"
+      help="姓名必须为字母、数字、下划线或中文汉字组成!"
+    }
+    else {
+      validateStatus="success";
+    }
+    this.setState({userNameItem:{value,validateStatus,help,hasFeedback}});
+  }
+
+  handleUserRoleChange = value => {
+    console.log(value)
   }
 
   render() {
-    const {userCode,userPassword,userRepeatPassword,userName} = this.state
+    /**
+     * 输入Item数据
+     */
     const {userCodeItem,userPasswordItem,userRepeatPasswordItem,userNameItem} = this.state
+    /**
+     * xx
+     */
+    const {userRoleList,departmentList} = this.state;
     return (
       <div className="reg">
         <header className="reg-header">
@@ -179,65 +209,88 @@ export default class Reg extends Component{
             className="reg-content-form"
             initialValues={{ remember: true }}
             onFinish={this.onFinish}
-            // onFieldsChange={(changedFields, allFields) => this.onFormFieldsChange(changedFields,allFields)}
           >
             <Form.Item
               name="userCode"
-              rules={[
-              { required: true, message: '请输入您的用户名!' },
-              { min: 4, message: '用户名至少4位!' },
-              { max: 16, message: '用户名至多16位!' },
-              { pattern: /[a-zA-Z0-9_]+$/, message: '用户名必须是英文、数字或下划线组成!' },
-              { whitespace: true, message: '不允许空格' },
-              ]}
+              {...userCodeItem}
             >
               <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
+                prefix={<BarcodeOutlined className="site-form-item-icon"/>}
                 placeholder="用户名"
+                value={userCodeItem.value}
+                onChange={this.onUserCodeChange}
               />
             </Form.Item>
             <Form.Item
               name="userPassword"
-              rules={[
-                { required: true, message: '请输入您的密码!' },
-                { whitespace: true, message: '不允许空格' },
-              ]}
+              {...userPasswordItem}
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="密码"
+                value={userPasswordItem.value}
+                onChange={this.onUserPasswordChange}
               />
             </Form.Item>
             <Form.Item
               name="userRepeatPassword"
-              rules={[
-                { required: true, message: '请重复输入您的密码!' },
-                { whitespace: true, message: '不允许空格' },
-              ]}
+              {...userRepeatPasswordItem}
             >
               <Input
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 type="password"
                 placeholder="重复密码"
+                value={userRepeatPasswordItem.value}
+                onChange={this.onUserRepeatPasswordChange}
               />
             </Form.Item>
             <Form.Item
+              className="reg-content-form-userNameItem"
               name="userName"
-              rules={[
-                { required: true, message: '请输入您的姓名!' },
-                { whitespace: true, message: '不允许空格' },
-              ]}
-              validateStatus={userNameItem.validateStatus}
-              help={userNameItem.tip}
+              {...userNameItem}
             >
-              <Input
-                prefix={<BarcodeOutlined className="site-form-item-icon"/>}
-                placeholder="姓名"
-                value={userName}
-                onChange={this.onUserNameChange}
-              />
+                <Input
+                  className="reg-content-form-userNameInput"
+                  prefix={<BarcodeOutlined className="site-form-item-icon"/>}
+                  placeholder="姓名"
+                  value={userNameItem.value}
+                  onChange={this.onUserNameChange}
+                />
             </Form.Item>
+            <Form.Item
+              className="reg-content-form-departmentItem"
+              name="departmentId"
+            >
+              <Select
+                value={departmentList[0].departmentId}
+                suffixIcon={<MyIcon type="heartSvg" className="site-form-item-icon"/>}
+                onChange={this.handleUserRoleChange}
+              >
+                {
+                  departmentList.map((value,index) => (
+                    <Option className="reg-content-form-departmentSelectItem" value={value.departmentId} key={index}>{value.departmentName}</Option>
+                  ))
+                }
+              </Select>
+            </Form.Item>
+            <Form.Item
+              className="reg-content-form-userRoleItem"
+              name="userRoleId"
+            >
+                <Select
+                  value={userRoleList[0].userRoleId}
+                  suffixIcon={<MyIcon type="heartSvg" className="site-form-item-icon"/>}
+                  onChange={this.handleUserRoleChange}
+                >
+                  {
+                    userRoleList.map((value,index) => (
+                      <Option className="reg-content-form-userRoleSelectItem" value={value.userRoleId} key={index}>{value.userRoleName}</Option>
+                    ))
+                  }
+                </Select>
+            </Form.Item>
+
             <Form.Item>
               <Button type="primary" htmlType="submit" className="reg-content-form-button">
                 注册

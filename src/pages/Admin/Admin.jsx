@@ -1,7 +1,8 @@
 import React,{Component} from "react";
 import {connect} from "react-redux"
-import {Layout, Menu, message, Button, Modal, Form, Input, Checkbox} from 'antd';
-import {NavLink,Link,Switch,Route,Redirect} from "react-router-dom";
+import {Layout, Menu, message, Button, Modal, Form, Input} from 'antd';
+import {Link,Redirect} from "react-router-dom";
+// import {NavLink,Link,Switch,Route,Redirect} from "react-router-dom";
 import PubSub from 'pubsub-js';
 import CompanyName from "../../components/ConpanyName/CompanyName";
 import 'antd/dist/antd.css';
@@ -18,6 +19,7 @@ import memoryUtils from "../../utils/memoryUtils";
 import './Admin.less'
 import moment from "moment";
 import storageUtils from "../../utils/storageUtils";
+import {reqLogin, reqUserPasswordEncryption} from "../../api";
 
 const { Header, Sider, Content } = Layout;
 
@@ -39,21 +41,30 @@ class Admin extends Component{
   handleModalChange=(event)=>{
     this.setState({userPassword:event.target.value});
   }
-  handleModalOK = () => {
+  handleModalOK = async () => {
     const {userPassword} = this.state;
     this.setState({confirmModalLoading:true});
-    if (userPassword===memoryUtils.user_key.user.userPassword){
-      storageUtils.update();
-      setTimeout(()=>{
+    const request = await reqLogin(memoryUtils.user_key.user.userCode,userPassword);
+    if (request.code===200) {
+      const currentUser = request.data;
+      if (currentUser){
+        storageUtils.saveUser(currentUser);
+          setTimeout(() => {
+            this.setState({
+              confirmModalLoading: false,
+              visible: false
+            });
+          }, 1500);
+      }else {
+        message.error("验证用户失败");
         this.setState({
-          confirmModalLoading:false,
-          visible: false
+          confirmModalLoading: false
         });
-      }, 1500);
+      }
     }else {
       message.error("验证用户失败");
       this.setState({
-        confirmModalLoading:false
+        confirmModalLoading: false
       });
     }
   };
@@ -63,7 +74,7 @@ class Admin extends Component{
     const {user,date} = user_key;
     let modal;
     // 内存没有存储user
-    if (!user || !user.userId){
+    if (!user||!user.userId){
       return <Redirect to="/login"/>
     }
     // 超过一小时未操作。需要验证登录
@@ -113,10 +124,10 @@ class Admin extends Component{
       <Layout className="ant-layout">
         <Sider  trigger={null} collapsible collapsed={collapsed}>
           <div id="logo" className="">
-            <a>
-              <img src={require("../../assets/logo/logo_tinycirclex.png")} />
+            <Link to="/admin">
+              <img alt="" src={require("../../assets/logo/logo_tinycirclex.png")} />
               <CompanyName/>
-            </a>
+            </Link>
           </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             {/*<NavLink>*/}

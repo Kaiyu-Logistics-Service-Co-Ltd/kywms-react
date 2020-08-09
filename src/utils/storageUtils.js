@@ -13,7 +13,7 @@ export default {
     store.set(USER_KEY, user_key) // 内部会自动转换成 json 再保存
   },
   update(){
-    const user = store.get(USER_KEY).user;
+    const user = this.getUser().user;
     this.saveUser(user);
   },
   getUser() { // 如果存在, 需要返回的是对象, 如果没有值, 返回{}
