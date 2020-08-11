@@ -1,27 +1,41 @@
 import React,{Component} from "react";
 import {connect} from "react-redux"
-import {Layout, Menu, message, Button, Modal, Form, Input} from 'antd';
-import {Link,Redirect} from "react-router-dom";
-// import {NavLink,Link,Switch,Route,Redirect} from "react-router-dom";
+import {Layout, message, Button, Modal, Form, Input} from 'antd';
+import {Redirect,Route,Switch} from "react-router-dom";
 import PubSub from 'pubsub-js';
-import CompanyName from "../../components/ConpanyName/CompanyName";
 import 'antd/dist/antd.css';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined, LockOutlined,
+  LockOutlined,
 } from '@ant-design/icons';
 import '@ant-design/pro-layout'
-import memoryUtils from "../../utils/memoryUtils";
-
-import './Admin.less'
 import moment from "moment";
+/**
+ * 存储模块
+ */
+import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
-import {reqLogin, reqUserPasswordEncryption} from "../../api";
-
-const { Header, Sider, Content } = Layout;
+/**
+ * 组件
+ */
+import {reqLogin} from "../../api";
+import LeftNav from "../../components/LeftNav/LeftNav";
+import RightHeader from "../../components/RightHeader/RightHeader";
+/**
+ * 路由组件
+ */
+import UserManagement from "../UserManagement/UserManagement";
+import AuthorityManagement from "../AuthorityManagement/AuthorityManagement";
+import WaybillManagement from "../WaybillManagement/WaybillManagement";
+import CargoManagement from "../Cargo/CargoManagement";
+import CargoCategoryManagement from "../Cargo/CargoCategoryManagement";
+/**
+ * LESS
+ */
+import './Admin.less'
+import Home from "../Home/Home";
+const { Header,Content } = Layout;
 
 class Admin extends Component{
 
@@ -49,12 +63,12 @@ class Admin extends Component{
       const currentUser = request.data;
       if (currentUser){
         storageUtils.saveUser(currentUser);
-          setTimeout(() => {
-            this.setState({
-              confirmModalLoading: false,
-              visible: false
-            });
-          }, 1500);
+        setTimeout(() => {
+          this.setState({
+            confirmModalLoading: false,
+            visible: false
+          });
+        }, 1500);
       }else {
         message.error("验证用户失败");
         this.setState({
@@ -72,14 +86,14 @@ class Admin extends Component{
     const {collapsed,visible,confirmModalLoading,userPassword} = this.state;
     const user_key = memoryUtils.user_key;
     const {user,date} = user_key;
-    let modal;
     // 内存没有存储user
     if (!user||!user.userId){
       return <Redirect to="/login"/>
     }
+    let userAuthenticationModal;
     // 超过一小时未操作。需要验证登录
     if ((moment().unix()-date)>=3600){
-      modal = (
+      userAuthenticationModal = (
         <Modal
           title="确认用户登录"
           visible={visible}
@@ -113,55 +127,43 @@ class Admin extends Component{
           </Form>
         </Modal>
       );
+    }else if ((moment().unix()-date)>=259200){
+      return <Redirect to="/login"/>
     }else {
       //刷新登录信息
-      storageUtils.update();
+      storageUtils.updateUser();
     }
-    if ((moment().unix()-date)>=259200){
-      return <Redirect to="/login"/>
+    let trigger;
+    if (collapsed){
+      trigger = (
+          <MenuUnfoldOutlined/>
+      );
+    }else {
+      trigger = (
+          <MenuFoldOutlined/>
+      );
     }
     return (
       <Layout className="ant-layout">
-        <Sider  trigger={null} collapsible collapsed={collapsed}>
-          <div id="logo" className="">
-            <Link to="/admin">
-              <img alt="" src={require("../../assets/logo/logo_tinycirclex.png")} />
-              <CompanyName/>
-            </Link>
-          </div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            {/*<NavLink>*/}
-            <Menu.Item key="1" icon={<UserOutlined />}>
-              nav 1
-            </Menu.Item>
-            {/*</NavLink>*/}
-            <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-              nav 2
-            </Menu.Item>
-            <Menu.Item key="3" icon={<UploadOutlined />}>
-              nav 3
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0 }}>
-            {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-              className: 'trigger',
-              onClick: this.toggle,
-            })}
+        <LeftNav collapsed={collapsed}/>
+        <Layout className="site-layout-right">
+          <Header className="right-header">
+            <span className='trigger' onClick={this.toggle}>{trigger}</span>
+            <RightHeader />
           </Header>
-          <Content
-            className="site-layout-background"
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              minHeight: 280,
-            }}
-          >
-            ##############
+          <Content className="right-content">
+            <Switch>
+              <Route path='/home' component={Home}></Route>
+              <Route path='/waybillManagement' component={WaybillManagement}></Route>
+              <Route path='/cargo/management' component={CargoManagement}></Route>
+              <Route path='/cargo/category' component={CargoCategoryManagement}></Route>
+              <Route path='/userManagement' component={UserManagement}></Route>
+              <Route path='/authorityManagement' component={AuthorityManagement}></Route>
+              <Redirect from='/' exact to='/home'/>
+            </Switch>
           </Content>
         </Layout>
-        {modal}
+        {userAuthenticationModal}
       </Layout>
     );
   }

@@ -1,11 +1,11 @@
 import React,{Component} from "react";
 
-export default class UserBar extends Component{
+export default class CargoCategoryManagement extends Component{
 
   render() {
     return (
       <div>
-
+        CargoCategoryManagement
       </div>
     );
   }

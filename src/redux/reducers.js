@@ -6,7 +6,7 @@ import {combineReducers} from "redux"
  * 函数名返回对应的状态值
  * dispatch会搜索全部函数....效率低下?
  */
-import {SOME_STR} from "./action-types"
+// import {SOME_STR} from "./action-types"
 
 const initComments=[];
 function comments(state = initComments,action) {

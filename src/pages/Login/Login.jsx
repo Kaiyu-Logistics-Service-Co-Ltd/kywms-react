@@ -1,12 +1,12 @@
 import React,{Component} from "react";
 import { message,Form, Input, Button, Checkbox,Row, Col } from 'antd';
 import { UserOutlined, LockOutlined,WechatOutlined,WeiboOutlined,QqOutlined} from '@ant-design/icons';
-import "./Login.less"
 import logo from "./images/logo_tinycirclex.png"
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import {reqLogin} from "../../api"
 import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
+import "./Login.less"
 /**
  * 登录路由组件
  */
@@ -47,7 +47,10 @@ export default class Login extends Component{
   };
 
   render() {
-    const {loading} = this.state;
+    const {user} = memoryUtils.user_key;
+    if (user&&user.userId){
+      return <Redirect to="/"/>
+    }
     return (
       <div className="login">
         <header className="login-header">
@@ -95,9 +98,9 @@ export default class Login extends Component{
                 <Checkbox>自动登录</Checkbox>
               </Form.Item>
 
-              <a className="login-content-form-forgot" href="">
+              <Link to="/wjmm" className="login-content-form-forgot">
                 忘记密码
-              </a>
+              </Link>
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit" className="login-content-form-button">

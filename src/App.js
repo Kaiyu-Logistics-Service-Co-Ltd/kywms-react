@@ -5,7 +5,7 @@ import '@ant-design/pro-layout'
 import {Route, Switch, Redirect, BrowserRouter} from "react-router-dom";
 
 import Login from "./pages/Login/Login";
-import Reg from "./pages/Reg/Reg";
+import AddUser from "./components/AddUser/AddUser";
 import Admin from "./pages/Admin/Admin";
 import memoryUtils from "./utils/memoryUtils";
 import storageUtils from "./utils/storageUtils";
@@ -19,9 +19,9 @@ class App extends Component{
       <BrowserRouter>
         <Switch>
           <Route path='/login' component={Login}/>
-          <Route path='/reg' component={Reg}/>
-          <Route path='/admin' component={Admin}/>
-          <Redirect to="/admin" />
+          <Route path='/addUser' component={AddUser}/>
+          <Route path='/' component={Admin}/>
+          <Redirect to="/" />
         </Switch>
       </BrowserRouter>
     );

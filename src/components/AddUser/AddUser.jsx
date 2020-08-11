@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import {Form, Input, Button, message, Select} from 'antd';
-import { UserOutlined, LockOutlined,BarcodeOutlined} from '@ant-design/icons';
-import "./Reg.less"
+import {LockOutlined,BarcodeOutlined} from '@ant-design/icons';
+import "./AddUser.less"
 import logo from "./images/logo_tinycirclex.png"
 import {reqAddUser,reqCheckIfTheUserCodeExists, reqUserRoleList} from "../../api/";
 import MyIcon from "../../assets/icon/myIcon";
@@ -11,7 +11,7 @@ import {reqDepartmentList} from "../../api";
  */
 
 const { Option } = Select;
-export default class Reg extends Component{
+export default class AddUser extends Component{
 
   state = {
     userCodeItem:{
@@ -34,8 +34,18 @@ export default class Reg extends Component{
       validateStatus:"validating",
       hasFeedback: false,
     },
-    userRoleList: [{}],
-    departmentList: [{}],
+    userRoleList: [
+      {
+        userRoleId:0,
+        userRoleName:"此用户未创建角色"
+      },
+    ],
+    departmentList: [
+      {
+        departmentId:0,
+        departmentName:"无部门"
+      },
+    ],
   }
   async componentDidMount() {
     const requestUserRoleList = await reqUserRoleList();
@@ -196,6 +206,8 @@ export default class Reg extends Component{
      * xx
      */
     const {userRoleList,departmentList} = this.state;
+    console.log(userRoleList)
+    console.log(departmentList)
     return (
       <div className="reg">
         <header className="reg-header">
@@ -203,7 +215,7 @@ export default class Reg extends Component{
           <h1>KYWMS</h1>
         </header>
         <section className="reg-content">
-          <h2>用户注册</h2>
+          <h2>添加用户</h2>
           <Form
             name="normal_reg"
             className="reg-content-form"
@@ -215,7 +227,7 @@ export default class Reg extends Component{
               {...userCodeItem}
             >
               <Input
-                prefix={<BarcodeOutlined className="site-form-item-icon"/>}
+                prefix={<BarcodeOutlined />}
                 placeholder="用户名"
                 value={userCodeItem.value}
                 onChange={this.onUserCodeChange}
@@ -226,7 +238,7 @@ export default class Reg extends Component{
               {...userPasswordItem}
             >
               <Input
-                prefix={<LockOutlined className="site-form-item-icon" />}
+                prefix={<LockOutlined  />}
                 type="password"
                 placeholder="密码"
                 value={userPasswordItem.value}
@@ -238,7 +250,7 @@ export default class Reg extends Component{
               {...userRepeatPasswordItem}
             >
               <Input
-                prefix={<LockOutlined className="site-form-item-icon" />}
+                prefix={<LockOutlined/>}
                 type="password"
                 placeholder="重复密码"
                 value={userRepeatPasswordItem.value}
@@ -252,7 +264,7 @@ export default class Reg extends Component{
             >
                 <Input
                   className="reg-content-form-userNameInput"
-                  prefix={<BarcodeOutlined className="site-form-item-icon"/>}
+                  prefix={<MyIcon type="userNameSvg" />}
                   placeholder="姓名"
                   value={userNameItem.value}
                   onChange={this.onUserNameChange}
@@ -261,10 +273,10 @@ export default class Reg extends Component{
             <Form.Item
               className="reg-content-form-departmentItem"
               name="departmentId"
+              initialValue={departmentList[0].departmentId}
             >
               <Select
-                value={departmentList[0].departmentId}
-                suffixIcon={<MyIcon type="heartSvg" className="site-form-item-icon"/>}
+                suffixIcon={<MyIcon type="departmentSvg"/>}
                 onChange={this.handleUserRoleChange}
               >
                 {
@@ -277,18 +289,18 @@ export default class Reg extends Component{
             <Form.Item
               className="reg-content-form-userRoleItem"
               name="userRoleId"
+              initialValue={userRoleList[0].userRoleId}
             >
-                <Select
-                  value={userRoleList[0].userRoleId}
-                  suffixIcon={<MyIcon type="heartSvg" className="site-form-item-icon"/>}
-                  onChange={this.handleUserRoleChange}
-                >
-                  {
-                    userRoleList.map((value,index) => (
-                      <Option className="reg-content-form-userRoleSelectItem" value={value.userRoleId} key={index}>{value.userRoleName}</Option>
-                    ))
-                  }
-                </Select>
+              <Select
+                suffixIcon={<MyIcon type="authoritySvg"/>}
+                onChange={this.handleUserRoleChange}
+              >
+                {
+                  userRoleList.map((value,index) => (
+                    <Option className="reg-content-form-userRoleSelectItem" value={value.userRoleId} key={index}>{value.userRoleName}</Option>
+                  ))
+                }
+              </Select>
             </Form.Item>
 
             <Form.Item>

@@ -9,15 +9,25 @@
 .trigger:hover {
     color: #1890ff;
 }
-
-.site-layout .site-layout-background {
-    background: #fff;
+.ant-layout{
+    .site-layout-right{
+        .right-header{
+            width: 100%;
+            background-color: #fff;
+            padding: 0;
+            margin: 0;
+            .right-header-content{
+                float: right;
+            }
+        }
+        .right-content{
+            background-color: #fff;
+            margin: 24px 16px;
+            padding: 24px;
+            minHeight: 280px;
+        }
+    }
 }
-
-.site-layout .site-layout-background {
-    background: #fff;
-}
-
 #logo {
     height: 48px;
     /*background: rgba(255, 255, 255, 0.2);*/
