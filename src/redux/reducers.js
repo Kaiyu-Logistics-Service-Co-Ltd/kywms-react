@@ -10,7 +10,6 @@ import {combineReducers} from "redux"
 
 const initComments=[];
 function comments(state = initComments,action) {
-  console.log("1")
   switch (action.type) {
     // case ADD_COMMENT: {
     //   console.log("2")
@@ -24,7 +23,6 @@ function comments(state = initComments,action) {
     //   return action.data;
     // }
     default:
-      console.log("0")
       return state;
   }
 }

@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 import {connect} from "react-redux"
 import {Layout, message, Button, Modal, Form, Input} from 'antd';
-import {Redirect,Route,Switch} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import PubSub from 'pubsub-js';
 import 'antd/dist/antd.css';
 import {
@@ -23,19 +23,11 @@ import {reqLogin} from "../../api";
 import LeftNav from "../../components/LeftNav/LeftNav";
 import RightHeader from "../../components/RightHeader/RightHeader";
 /**
- * 路由组件
- */
-import UserManagement from "../UserManagement/UserManagement";
-import AuthorityManagement from "../AuthorityManagement/AuthorityManagement";
-import WaybillManagement from "../WaybillManagement/WaybillManagement";
-import CargoManagement from "../Cargo/CargoManagement";
-import CargoCategoryManagement from "../Cargo/CargoCategoryManagement";
-/**
  * LESS
  */
 import './Admin.less'
-import Home from "../Home/Home";
-const { Header,Content } = Layout;
+import RightContent from "../../components/RightContent/RightContent";
+const { Header} = Layout;
 
 class Admin extends Component{
 
@@ -147,21 +139,14 @@ class Admin extends Component{
       <Layout className="ant-layout">
         <LeftNav collapsed={collapsed}/>
         <Layout className="site-layout-right">
+          {/*<Header className="right-header-bg"/>*/}
           <Header className="right-header">
-            <span className='trigger' onClick={this.toggle}>{trigger}</span>
-            <RightHeader />
+            <div className="right-header-content">
+              <span className='trigger' onClick={this.toggle}>{trigger}</span>
+              <RightHeader/>
+            </div>
           </Header>
-          <Content className="right-content">
-            <Switch>
-              <Route path='/home' component={Home}></Route>
-              <Route path='/waybillManagement' component={WaybillManagement}></Route>
-              <Route path='/cargo/management' component={CargoManagement}></Route>
-              <Route path='/cargo/category' component={CargoCategoryManagement}></Route>
-              <Route path='/userManagement' component={UserManagement}></Route>
-              <Route path='/authorityManagement' component={AuthorityManagement}></Route>
-              <Redirect from='/' exact to='/home'/>
-            </Switch>
-          </Content>
+          <RightContent/>
         </Layout>
         {userAuthenticationModal}
       </Layout>

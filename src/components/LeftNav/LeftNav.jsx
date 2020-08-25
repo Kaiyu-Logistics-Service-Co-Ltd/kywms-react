@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 /**
  * menuConfig
  */
-import menuList from "../../config/menuConfig";
+import {menuList} from "../../config/menuConfig";
 /**
  * LESS
  */

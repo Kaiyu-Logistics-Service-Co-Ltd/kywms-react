@@ -1,8 +1,9 @@
 import React from "react";
-import {UserOutlined,HomeOutlined} from "@ant-design/icons";
+import {UserOutlined,HomeOutlined,SettingOutlined} from "@ant-design/icons";
 import MyIcon from "../assets/icon/myIcon";
+import UserBar from "../components/User/UserBar";
 
-const menuList = [
+export const menuList = [
   {
     title: '首页', // 菜单标题名称
     key: '/home', // 对应的path
@@ -42,7 +43,54 @@ const menuList = [
     key: '/authorityManagement',
     icon: <MyIcon type="authoritySvg"/>,
   },
+];
 
-]
+const getBreadcrumbNameMap = ()=>{
 
-export default menuList
+  let  list=[];
+  let objItem;
+  menuList.forEach((item) =>{
+    if (item.key){
+      objItem = {key: item.key,title: item.title, };
+      list.push(objItem);
+    }
+    if (item.children){
+      item.children.forEach(cItem => {
+        if (cItem){
+          objItem = {key: cItem.key,title: cItem.title, };
+          list.push(objItem);
+        }
+      });
+    }
+  });
+  const result = list.reduce((accumulator, item) => {
+    return { ...accumulator, [item.key]: item.title }
+  }, {})
+  return result;
+}
+export const breadcrumbNameMap = getBreadcrumbNameMap();
+export const userMenuList=[
+  {
+    title: '用户',
+    key: '/user',
+    icon: <UserBar/>,
+    children: [
+      {
+        title: '个人中心',
+        key: '/user/information',
+        icon: <UserOutlined/>,
+      },
+      {
+        title: '个人设置',
+        key: '/user/setting',
+        icon: <SettingOutlined />,
+      },
+      {
+        title: '退出登录',
+        key: '/user/logout',
+        icon: <MyIcon type="authoritySvg"/>,
+        group: "logout",
+      },
+    ],
+  }
+];

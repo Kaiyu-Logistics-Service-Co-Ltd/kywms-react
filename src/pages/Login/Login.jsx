@@ -38,7 +38,7 @@ export default class Login extends Component{
       storageUtils.saveUser(user);
       memoryUtils.user_key = storageUtils.getUser();
       message.success(response.message);
-      this.props.history.replace("/admin");
+      this.props.history.replace("/");
     }else if (response.code===401){
       message.error(response.message);
     }else if (response.code===500){
