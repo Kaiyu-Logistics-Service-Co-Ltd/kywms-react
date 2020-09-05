@@ -6,39 +6,54 @@ import {combineReducers} from "redux"
  * 函数名返回对应的状态值
  * dispatch会搜索全部函数....效率低下?
  */
-// import {SOME_STR} from "./action-types"
+import {
+  ADD_PageNum,
+  Reduce_PageNum,
+  Change_ParentId,
+  Reset_ParentId,
+  Change_ParentName,
+  Reset_ParentName
+} from "./action-types"
 
-const initComments=[];
-function comments(state = initComments,action) {
+function currentCargoCategoryPageNum(state =1,action) {
   switch (action.type) {
-    // case ADD_COMMENT: {
-    //   console.log("2")
-    //   return [action.data, ...state];
-    // }
-    // case DELETE_COMMENT:{
-    //   console.log("3")
-    //   return state.filter((comment,index) => index!==action.data);
-    // }
-    // case RECEIVE_COMMENTS:{
-    //   return action.data;
-    // }
+    case ADD_PageNum: {
+      return state+1;
+    }
+    case Reduce_PageNum:{
+      return state-1;
+    }
     default:
       return state;
   }
 }
-function count(state = 0 ,action) {
+function currentCargoCategoryParentId(state = 0,action) {
   switch (action.type) {
-    // case INCREMENT: {
-    //   return state + action.data;
-    // }
-    // case DECREMENT: {
-    //   return state - action.data;
-    // }
+    case Change_ParentId: {
+      return action.data;
+    }
+    case Reset_ParentId:{
+      return 0;
+    }
     default:
       return state;
   }
 }
+function currentCargoCategoryParentName(state ="",action) {
+  switch (action.type) {
+    case Change_ParentName: {
+      return action.data;
+    }
+    case Reset_ParentName:{
+      return "";
+    }
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
-  comments, //指定reducer对应的属性
-  count
+  currentCargoCategoryPageNum, //指定reducer对应的属性
+  currentCargoCategoryParentId,
+  currentCargoCategoryParentName
 });

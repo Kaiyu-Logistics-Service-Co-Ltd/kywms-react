@@ -139,7 +139,6 @@ class Admin extends Component{
       <Layout className="ant-layout">
         <LeftNav collapsed={collapsed}/>
         <Layout className="site-layout-right">
-          {/*<Header className="right-header-bg"/>*/}
           <Header className="right-header">
             <div className="right-header-content">
               <span className='trigger' onClick={this.toggle}>{trigger}</span>

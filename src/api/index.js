@@ -3,6 +3,7 @@
  */
 import ajax from './ajax'
 // 登陆
+export const ping = () => ajax('/user/ping',null,"GET");
 export const reqLogin = (userCode,userPassword) => ajax('/user/login',{userCode,userPassword},"POST");
 export const reqLogout = () => ajax('/user/removeSession',null,"POST");
 export const reqCheckIfTheUserCodeExists = (userCode) => ajax('user/checkIfTheUserCodeExists',{userCode},"GET");
@@ -15,7 +16,7 @@ export const reqDepartmentList = () => ajax('/rwa/showAllDepartments',null);
 /**
  * 货物分类管理接口
  */
-export const reqCargoCategoryList = (cargoCategoryParentId) => ajax('/cargo/getCategoryByParentId', {cargoCategoryParentId},"GET");
+export const reqCargoCategoryList = (pn,cargoCategoryParentId) => ajax('/cargo/getCategoryByParentId', {pn,cargoCategoryParentId},"GET");
 export const reqAddCargoCategory = (cargoCategoryName,cargoCategoryParentId) => ajax('/cargo/addCategory', {cargoCategoryName,cargoCategoryParentId},"POST");
 export const reqUpdateCargoCategory = (cargoCategoryId) => ajax('/cargo/deleteCategory', {cargoCategoryId},"POST");
 export const reqDeleteCargoCategory = (cargoCategoryId,cargoCategoryName) => ajax('/cargo/updateCategory',{cargoCategoryId,cargoCategoryName},"POST");
