@@ -51,6 +51,18 @@ function currentCargoCategoryParentName(state ="",action) {
       return state;
   }
 }
+function showCargoCategoryModalStatus(state = 0,action) {
+  switch (action.type) {
+    case Change_ParentName: {
+      return action.data;
+    }
+    case Reset_ParentName:{
+      return "";
+    }
+    default:
+      return state;
+  }
+}
 
 export default combineReducers({
   currentCargoCategoryPageNum, //指定reducer对应的属性

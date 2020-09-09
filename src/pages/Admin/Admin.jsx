@@ -90,7 +90,9 @@ class Admin extends Component{
           title="确认用户登录"
           visible={visible}
           closable={false}
+          maskClosable={false}
           centered={true}
+
           footer={
             <Button type="primary" className="ant-btn ant-btn-primary" loading={confirmModalLoading} onClick={this.handleModalOK}>
               <span>OK</span>

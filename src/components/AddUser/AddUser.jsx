@@ -47,24 +47,6 @@ export default class AddUser extends Component{
       },
     ],
   }
-  async componentDidMount() {
-    const requestUserRoleList = await reqUserRoleList();
-    if (requestUserRoleList.code===200){
-      const userRoleList = requestUserRoleList.data;
-      this.setState({userRoleList});
-    }else if (requestUserRoleList.code===404){
-      this.setState({userRoleList: [{userRoleId:0,userRoleName:requestUserRoleList.message},]});
-    }
-    const requestDepartmentList = await reqDepartmentList();
-    if (requestDepartmentList.code===200){
-      const departmentList = requestDepartmentList.data;
-      this.setState({departmentList});
-    }else if (requestDepartmentList.code===404){
-      this.setState({departmentList: [{departmentId:0,departmentName:requestDepartmentList.message},]});
-    }
-  }
-
-
   onFinish = async values => {
     console.log(values)
     const {userCode,userName,userPassword,userRepeatPassword,userRoleId,departmentId} = values
@@ -88,6 +70,8 @@ export default class AddUser extends Component{
       }
     }
   };
+
+
   onUserCodeChange=(event)=>{
     const value = event.target.value;
     this.userCodeValidate(value);
@@ -104,7 +88,6 @@ export default class AddUser extends Component{
     const value = event.target.value;
     this.userNameValidate(value);
   }
-
   userCodeValidate = async(value)=>{
     let validateStatus,help,hasFeedback=true;
     if (!value){
@@ -137,6 +120,7 @@ export default class AddUser extends Component{
     }
     this.setState({userCodeItem:{value,validateStatus,help,hasFeedback}});
   }
+
   userPasswordValidate = (value)=>{
     let validateStatus,help,hasFeedback=true;
     if (!value){
@@ -192,9 +176,25 @@ export default class AddUser extends Component{
     }
     this.setState({userNameItem:{value,validateStatus,help,hasFeedback}});
   }
-
   handleUserRoleChange = value => {
     console.log(value)
+  }
+
+  async componentDidMount() {
+    const requestUserRoleList = await reqUserRoleList();
+    if (requestUserRoleList.code===200){
+      const userRoleList = requestUserRoleList.data;
+      this.setState({userRoleList});
+    }else if (requestUserRoleList.code===404){
+      this.setState({userRoleList: [{userRoleId:0,userRoleName:requestUserRoleList.message},]});
+    }
+    const requestDepartmentList = await reqDepartmentList();
+    if (requestDepartmentList.code===200){
+      const departmentList = requestDepartmentList.data;
+      this.setState({departmentList});
+    }else if (requestDepartmentList.code===404){
+      this.setState({departmentList: [{departmentId:0,departmentName:requestDepartmentList.message},]});
+    }
   }
 
   render() {
@@ -262,13 +262,13 @@ export default class AddUser extends Component{
               name="userName"
               {...userNameItem}
             >
-                <Input
-                  className="reg-content-form-userNameInput"
-                  prefix={<MyIcon type="userNameSvg" />}
-                  placeholder="姓名"
-                  value={userNameItem.value}
-                  onChange={this.onUserNameChange}
-                />
+              <Input
+                className="reg-content-form-userNameInput"
+                prefix={<MyIcon type="userNameSvg" />}
+                placeholder="姓名"
+                value={userNameItem.value}
+                onChange={this.onUserNameChange}
+              />
             </Form.Item>
             <Form.Item
               className="reg-content-form-departmentItem"
