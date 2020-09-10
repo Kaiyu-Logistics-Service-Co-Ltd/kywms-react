@@ -9,6 +9,9 @@ import AddUser from "./components/AddUser/AddUser";
 import Admin from "./pages/Admin/Admin";
 import memoryUtils from "./utils/memoryUtils";
 import storageUtils from "./utils/storageUtils";
+import {
+  setPageNum
+} from "./redux/actions";
 //读取本地user存储
 const user_key = storageUtils.getUser();
 memoryUtils.user_key = user_key;
@@ -28,6 +31,8 @@ class App extends Component{
   }
 }
 export default connect(
-  state =>({comments:state.comments}), //state就是一个comments数组
-  {}
+  state =>({
+    currentCargoCategoryPageNum:state.currentCargoCategoryPageNum
+  }), //state就是一个comments数组
+  {setPageNum}
 )(App);

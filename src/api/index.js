@@ -18,7 +18,7 @@ export const reqDepartmentList = () => ajax('/rwa/showAllDepartments',null);
  */
 export const reqCargoCategoryList = (pn,cargoCategoryParentId) => ajax('/cargo/getCategoryByParentId', {pn,cargoCategoryParentId},"GET");
 export const reqFirstCategoryList = () => ajax('/cargo/getFirstCategory', null,"GET");
-export const reqAddCargoCategory = (cargoCategoryName,cargoCategoryParentId) => ajax('/cargo/addCategory', {cargoCategoryName,cargoCategoryParentId},"POST");
-export const reqUpdateCargoCategory = (cargoCategoryId) => ajax('/cargo/deleteCategory', {cargoCategoryId},"POST");
-export const reqDeleteCargoCategory = (cargoCategoryId,cargoCategoryName) => ajax('/cargo/updateCategory',{cargoCategoryId,cargoCategoryName},"POST");
+export const reqAddCargoCategory = (cargoCategory) => ajax('/cargo/addCategory', cargoCategory,"POST");
+export const reqDeleteCargoCategory = (cargoCategoryId) => ajax('/cargo/deleteCategory', {cargoCategoryId},"POST");
+export const reqUpdateCargoCategory = (cargoCategory) => ajax('/cargo/updateCategory',cargoCategory,"POST");
 

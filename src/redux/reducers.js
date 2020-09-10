@@ -7,21 +7,20 @@ import {combineReducers} from "redux"
  * dispatch会搜索全部函数....效率低下?
  */
 import {
-  ADD_PageNum,
-  Reduce_PageNum,
+  SET_PageNum,
   Change_ParentId,
   Reset_ParentId,
   Change_ParentName,
-  Reset_ParentName
+  Reset_ParentName,
+  SHOW_UPDATE_MODAL,
+  SHOW_ADD_MODAL,
+  UNSHOW_MODAL
 } from "./action-types"
 
 function currentCargoCategoryPageNum(state =1,action) {
   switch (action.type) {
-    case ADD_PageNum: {
-      return state+1;
-    }
-    case Reduce_PageNum:{
-      return state-1;
+    case SET_PageNum:{
+      return action.data;
     }
     default:
       return state;
@@ -51,13 +50,17 @@ function currentCargoCategoryParentName(state ="",action) {
       return state;
   }
 }
+
 function showCargoCategoryModalStatus(state = 0,action) {
   switch (action.type) {
-    case Change_ParentName: {
-      return action.data;
+    case SHOW_ADD_MODAL: {
+      return 1;
     }
-    case Reset_ParentName:{
-      return "";
+    case SHOW_UPDATE_MODAL:{
+      return 2;
+    }
+    case UNSHOW_MODAL:{
+      return 0;
     }
     default:
       return state;
@@ -67,5 +70,6 @@ function showCargoCategoryModalStatus(state = 0,action) {
 export default combineReducers({
   currentCargoCategoryPageNum, //指定reducer对应的属性
   currentCargoCategoryParentId,
-  currentCargoCategoryParentName
+  currentCargoCategoryParentName,
+  showCargoCategoryModalStatus,
 });

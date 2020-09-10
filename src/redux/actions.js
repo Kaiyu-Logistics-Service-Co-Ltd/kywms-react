@@ -5,20 +5,24 @@
  * 异步的action都返回的是一个函数
  */
 import {
-  ADD_PageNum,
-  Reduce_PageNum,
+  SET_PageNum,
   Change_ParentId,
   Reset_ParentId,
   Change_ParentName,
-  Reset_ParentName
+  Reset_ParentName,
+  SHOW_UPDATE_MODAL,
+  SHOW_ADD_MODAL,
+  UNSHOW_MODAL
 } from "./action-types"
 
-export const addPageNum = () => ({type:ADD_PageNum,data:null});
-export const reducePageNum = () => ({type:Reduce_PageNum,data:null});
+export const setPageNum = (pageNum) => ({type:SET_PageNum,data:pageNum});
 export const changeParentId = (parentId) => ({type:Change_ParentId,data:parentId});
 export const resetParentId = () => ({type:Reset_ParentId,data:null});
 export const changeParentName = (parentName) => ({type:Change_ParentName,data:parentName});
 export const resetParentName = () => ({type:Reset_ParentName,data:null});
+export const showAddModal = () => ({type:SHOW_ADD_MODAL,data:null});
+export const showUpdateModal = () => ({type:SHOW_UPDATE_MODAL,data:null});
+export const unShowModal = () => ({type:UNSHOW_MODAL,data:null});
 
 
 // //同步接收comments
