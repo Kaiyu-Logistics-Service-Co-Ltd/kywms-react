@@ -45,7 +45,7 @@ export const menuList = [
   },
 ];
 
-const getBreadcrumbNameMap = ()=>{
+const getMainMenuBreadcrumbNameMap = ()=>{
 
   let  list=[];
   let objItem;
@@ -68,7 +68,7 @@ const getBreadcrumbNameMap = ()=>{
   }, {})
   return result;
 }
-export const breadcrumbNameMap = getBreadcrumbNameMap();
+export const breadcrumbNameMap = getMainMenuBreadcrumbNameMap();
 export const userMenuList=[
   {
     title: '用户',
@@ -77,7 +77,7 @@ export const userMenuList=[
     children: [
       {
         title: '个人中心',
-        key: '/user/information',
+        key: '/user/center',
         icon: <UserOutlined/>,
       },
       {
@@ -94,3 +94,26 @@ export const userMenuList=[
     ],
   }
 ];
+const getUserMenuBreadcrumbNameMap = () => {
+  let  list=[];
+  let objItem;
+  userMenuList.forEach((item) =>{
+    if (item.key){
+      objItem = {key: item.key,title: item.title, };
+      list.push(objItem);
+    }
+    if (item.children){
+      item.children.forEach(cItem => {
+        if (cItem){
+          objItem = {key: cItem.key,title: cItem.title, };
+          list.push(objItem);
+        }
+      });
+    }
+  });
+  const result = list.reduce((accumulator, item) => {
+    return { ...accumulator, [item.key]: item.title }
+  }, {})
+  return result;
+}
+export const userMenuBreadcrumbNameMap = getUserMenuBreadcrumbNameMap();

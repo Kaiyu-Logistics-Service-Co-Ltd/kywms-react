@@ -6,11 +6,12 @@ export default class UserBar extends Component{
 
   render() {
     const user = memoryUtils.user_key.user;
+    console.log(user)
     return (
       <div className="userBar-main">
         <Row>
           <Col>
-            <Avatar size={"large"} src="http://localhost:10086/resource/target.jpg"/>
+            <Avatar size={"large"} src="http://localhost:10086/resources/target.jpg"/>
           </Col>
           <Col>
             &nbsp;&nbsp;&nbsp;{user.userName}

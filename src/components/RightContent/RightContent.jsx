@@ -13,11 +13,13 @@ import AuthorityManagement from "../../pages/AuthorityManagement/AuthorityManage
 /**
  *
  */
-import {breadcrumbNameMap} from "../../config/menuConfig";
+import {breadcrumbNameMap,userMenuBreadcrumbNameMap} from "../../config/menuConfig";
 /**
  * LESS
  */
 import "./RightContent.less"
+import UserSetting from "../../pages/User/UserSetting";
+import UserCenter from "../../pages/User/UserCenter";
 
 const {Content} = Layout;
 
@@ -31,7 +33,7 @@ class RightContent extends Component{
       return (
         {
           path: url,
-          breadcrumbName: breadcrumbNameMap[url],
+          breadcrumbName: breadcrumbNameMap[url]===null?breadcrumbNameMap[url]:userMenuBreadcrumbNameMap[url],
         }
       );
     });
@@ -65,6 +67,8 @@ class RightContent extends Component{
             <Route path='/cargo/category' component={CargoCategoryManagement}></Route>
             <Route path='/userManagement' component={UserManagement}></Route>
             <Route path='/authorityManagement' component={AuthorityManagement}></Route>
+            <Route path='/user/center' component={UserCenter}/>
+            <Route path='/user/setting' component={UserSetting}/>
           </Switch>
         </Content>
       </div>
