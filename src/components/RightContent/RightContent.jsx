@@ -30,10 +30,13 @@ class RightContent extends Component{
     const pathSnippets = location.pathname.split('/').filter(i => i);
     let routes = pathSnippets.map((_, index) => {
       const url = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+      console.log(url);
+      console.log("breadcrumbNameMap======>",breadcrumbNameMap[url]);
+      // console.log(userMenuBreadcrumbNameMap[url]);
       return (
         {
           path: url,
-          breadcrumbName: breadcrumbNameMap[url]===null?breadcrumbNameMap[url]:userMenuBreadcrumbNameMap[url],
+          breadcrumbName: breadcrumbNameMap[url]!==undefined?breadcrumbNameMap[url]:userMenuBreadcrumbNameMap[url],
         }
       );
     });
@@ -43,7 +46,9 @@ class RightContent extends Component{
         breadcrumbName: "首页",
       },];
     }
+    console.log("routes==========>",routes)
     const title = routes[routes.length-1].breadcrumbName;
+    console.log("title===========>",title);
     return (
       <div className="right-content">
         <Row>
