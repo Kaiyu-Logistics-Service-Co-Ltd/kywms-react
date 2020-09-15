@@ -1,10 +1,12 @@
 import React,{Component} from "react";
+import {Switch,Route,Redirect} from "react-router-dom"
 import {Col, Menu, message, Row} from "antd";
 import "./UserSetting.less"
+import UserInfoModify from "../../components/User/userInfoModify";
+import Empty from "../../components/User/Empty";
 export default class UserSetting extends Component{
 
   state = {
-    menuMode:true, //horizontal inline vertical
 
   }
   onOpenChange = () =>{
@@ -12,17 +14,9 @@ export default class UserSetting extends Component{
     this.setState({menuMode:!this.state.menuMode});
   }
   render() {
-    const {menuMode} = this.state;
-    let mode = "inline";
-    if (menuMode===true){
-      mode = "vertical";
-    }else {
-      mode = "horizontal"
-    }
     return (
-      <div>
-        <Row>
-          <Col className="userSetting-menu" xs={24} sm={24} md={24} lg={6} xl={4} xxl={4}>
+        <Row className="userSetting-main">
+          <Col className="userSetting-menu" xs={24} sm={24} md={24} lg={6} xl={6} xxl={6}>
             <Row>
               <Col className="userSetting-menu-horizontal-" xs={24} sm={24} md={24} lg={0} xl={0} xxl={0}>
                 <Menu mode={"horizontal"}>
@@ -42,11 +36,14 @@ export default class UserSetting extends Component{
               </Col>
             </Row>
           </Col>
-          <Col className="userSetting-menu" xs={24} sm={24} md={24} lg={20} xl={20} xxl={20}>
-            aaa
+          <Col className="userSetting-content" xs={24} sm={24} md={24} lg={17} xl={17} xxl={17}>
+            <Switch>
+              <Route path="/user/setting/info" component={UserInfoModify}></Route>
+              <Route path="/user/setting/empty" component={Empty}></Route>
+              <Redirect to="/user/setting/info"/>
+            </Switch>
           </Col>
         </Row>
-      </div>
     );
   }
 }
