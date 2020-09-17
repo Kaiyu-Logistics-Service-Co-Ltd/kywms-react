@@ -117,3 +117,40 @@ const getUserMenuBreadcrumbNameMap = () => {
   return result;
 }
 export const userMenuBreadcrumbNameMap = getUserMenuBreadcrumbNameMap();
+export const userSettingList=[
+
+      {
+        title: '信息设置',
+        key: '/user/setting/info',
+        icon: <UserOutlined/>,
+      },
+      {
+        title: '退出登录',
+        key: '/user/setting/empty',
+        icon: <MyIcon type="authoritySvg"/>,
+        group: "logout",
+      },
+];
+const getUserSettingBreadcrumbNameMap = () => {
+  let  list=[];
+  let objItem;
+  userMenuList.forEach((item) =>{
+    if (item.key){
+      objItem = {key: item.key,title: item.title, };
+      list.push(objItem);
+    }
+    if (item.children){
+      item.children.forEach(cItem => {
+        if (cItem){
+          objItem = {key: cItem.key,title: cItem.title, };
+          list.push(objItem);
+        }
+      });
+    }
+  });
+  const result = list.reduce((accumulator, item) => {
+    return { ...accumulator, [item.key]: item.title }
+  }, {})
+  return result;
+}
+export const userSettingBreadcrumbNameMap = getUserMenuBreadcrumbNameMap();

@@ -1,9 +1,11 @@
 import React,{Component} from "react";
-import {Switch,Route,Redirect} from "react-router-dom"
+import {Switch, Route, NavLink} from "react-router-dom"
 import {Col, Menu, message, Row} from "antd";
 import "./UserSetting.less"
 import UserInfoModify from "../../components/User/userInfoModify";
 import Empty from "../../components/User/Empty";
+import {userSettingList} from "../../config/menuConfig";
+const { SubMenu } = Menu;
 export default class UserSetting extends Component{
 
   state = {
@@ -13,7 +15,47 @@ export default class UserSetting extends Component{
     message.info("onOpenChange");
     this.setState({menuMode:!this.state.menuMode});
   }
+  getMenuNodes= (menuList) =>{
+    const {pathname} = this.props.location
+    return menuList.reduce((pre,item)=>{
+      /**
+       * 向pre添加<Menu.Item>
+       */
+      if (!item.children){
+        pre.push((
+          <Menu.Item key={item.key} icon={item.icon}>
+            <NavLink to={item.key}>
+              <span>{item.title}</span>
+            </NavLink>
+          </Menu.Item>
+        ));
+      }else {
+        /**
+         * 查找与当前路径匹配的子Item
+         */
+        const cItem = item.children.find(cItem => cItem.key===pathname);
+        if (cItem){
+          this.openKey = item.key
+        }
+        pre.push((
+          <SubMenu
+            key={item.key}
+            title={<span>{item.icon}<span>{item.title}</span></span>}
+          >
+            {
+              this.getMenuNodes(item.children)
+            }
+          </SubMenu>
+        ));
+      }
+      return pre
+    },[]);
+  }
+  UNSAFE_componentWillMount() {
+    this.menuNodes = this.getMenuNodes(userSettingList)
+  }
   render() {
+    console.log(this.menuNodes);
     return (
         <Row className="userSetting-main">
           <Col className="userSetting-menu" xs={24} sm={24} md={24} lg={6} xl={6} xxl={6}>
@@ -38,9 +80,8 @@ export default class UserSetting extends Component{
           </Col>
           <Col className="userSetting-content" xs={24} sm={24} md={24} lg={17} xl={17} xxl={17}>
             <Switch>
-              <Route path="/user/setting/info" component={UserInfoModify}></Route>
+              <Route path="/user/setting" component={UserInfoModify}></Route>
               <Route path="/user/setting/empty" component={Empty}></Route>
-              <Redirect to="/user/setting/info"/>
             </Switch>
           </Col>
         </Row>
