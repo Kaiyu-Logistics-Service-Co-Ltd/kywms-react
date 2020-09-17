@@ -76,9 +76,9 @@ class RightHeader extends Component{
     return (
       <div className="right-header-content-main">
         <Row>
-          <Col xs={18} sm={18} md={18} lg={18} xl={18} xxl={20}>
+          <Col xs={20} sm={21} md={18} lg={18} xl={18} xxl={20}>
           </Col>
-          <Col xs={6} sm={6} md={6} lg={6} xl={6} xxl={4}>
+          <Col xs={4} sm={3} md={6} lg={6} xl={6} xxl={4}>
             <Menu className="user-menu" mode="horizontal">
               {
                 this.getMenuNodes(userMenuList)

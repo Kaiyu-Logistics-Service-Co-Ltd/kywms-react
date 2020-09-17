@@ -13,7 +13,7 @@ import AuthorityManagement from "../../pages/AuthorityManagement/AuthorityManage
 /**
  *
  */
-import {breadcrumbNameMap,userMenuBreadcrumbNameMap} from "../../config/menuConfig";
+import {breadcrumbNameMap, userMenuBreadcrumbNameMap, userSettingBreadcrumbNameMap} from "../../config/menuConfig";
 /**
  * LESS
  */
@@ -33,7 +33,7 @@ class RightContent extends Component{
       return (
         {
           path: url,
-          breadcrumbName: breadcrumbNameMap[url]!==undefined?breadcrumbNameMap[url]:userMenuBreadcrumbNameMap[url],
+          breadcrumbName: breadcrumbNameMap[url]!==undefined?breadcrumbNameMap[url]:userMenuBreadcrumbNameMap[url]!==undefined?userMenuBreadcrumbNameMap[url]:userSettingBreadcrumbNameMap[url],
         }
       );
     });
@@ -47,7 +47,7 @@ class RightContent extends Component{
     return (
       <div className="right-content">
         <Row>
-          <Col span={/*xs={0} sm={0} md={0} lg={24} xl={24} xxl={24}*/24}>
+          <Col xs={0} sm={0} md={0} lg={24} xl={24} xxl={24}>
             <PageHeader
               ghost={false}
               className="route-page-header"
