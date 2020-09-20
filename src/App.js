@@ -14,7 +14,9 @@ import {
 } from "./redux/actions";
 //读取本地user存储
 const user_key = storageUtils.getUser();
+const user_resource = storageUtils.getUserResource();
 memoryUtils.user_key = user_key;
+memoryUtils.user_resource = user_resource;
 class App extends Component{
 
   render() {

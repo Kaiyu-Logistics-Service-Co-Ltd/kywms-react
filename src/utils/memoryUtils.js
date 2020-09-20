@@ -5,9 +5,13 @@ export default {
   /**
    * 保存当前登录的用户
    */
-  user_key: {},//保存
+  user_key: {},
   /**
    * 保存用户设置
    */
-  user_settings:{}
+  user_settings:{},
+  /**
+   * 保存用户资源
+   */
+  user_resource:{}
 }

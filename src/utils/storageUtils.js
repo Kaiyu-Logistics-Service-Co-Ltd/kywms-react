@@ -5,6 +5,7 @@ import store from "store"
 import moment from "moment";
 const USER_KEY = 'user_key';
 const USER_SETTING='user_settings';
+const USER_RESOURCE='user_resource';
 export default {
   /**
    * 用户信息存储模块
@@ -45,5 +46,21 @@ export default {
     this.updateSetting(1,2);
     this.saveSetting(1);
     store.remove(USER_SETTING)
+  },
+  /**
+   * 用户页面资源存储模块
+   */
+  saveUserResource(resource) {
+    store.set(USER_RESOURCE, resource) // 内部会自动转换成 json 再保存
+  },
+  updateUserResource(key,value){
+    const resource = this.getUserResource();
+    this.saveUserResource(resource);
+  },
+  getUserResource() {
+    return store.get(USER_RESOURCE) || {}
+  },
+  removeUserResource() {
+    store.remove(USER_RESOURCE)
   }
 }

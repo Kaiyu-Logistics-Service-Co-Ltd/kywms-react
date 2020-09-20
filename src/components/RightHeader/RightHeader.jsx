@@ -62,8 +62,9 @@ class RightHeader extends Component{
           memoryUtils.user_key={};
           this.props.history.replace('/login');
         }else if (request.code===401){
-          message.error(request.message);
-          console.log(request.data)
+          storageUtils.removeUser();
+          memoryUtils.user_key={};
+          this.props.history.replace('/login');
         }else if (request.code===404){
           message.error(request.message);
         }else {
