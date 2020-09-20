@@ -1,8 +1,10 @@
-import React,{Component} from "react";
-import {Button, Form, Input,Row,Layout} from "antd";
+import React, {Component,} from "react";
+import {Button, Form, Input, Row, Layout, Col, Upload, Avatar,Card} from "antd";
+import ImgCrop from 'antd-img-crop';
 import "./UserBasicSettings.less"
 import memoryUtils from "../../utils/memoryUtils";
 import {reqUpdateUserInfo} from "../../api";
+import {UploadOutlined} from "@ant-design/icons";
 const {Content} = Layout;
 export default class UserBasicSettings extends Component{
 
@@ -23,6 +25,13 @@ export default class UserBasicSettings extends Component{
         validateStatus:"validating",
         hasFeedback: false,
       },
+      uploadAvatar:{
+        name:"avatar",
+        accept:"image/jpeg,image/png",
+        action:"/resource/uploadAvatar",
+        listType:"picture",
+        method:"post",
+      }
     }
   }
   onFinish = async values => {
@@ -86,49 +95,67 @@ export default class UserBasicSettings extends Component{
     this.setState({userMobileItem: {value, validateStatus, help, hasFeedback}});
   }
   render() {
-    const {userNameItem,userMobileItem} = this.state;
+    const {userNameItem,userMobileItem,uploadAvatar} = this.state;
+    const {resourcePath} = memoryUtils.user_resource;
     return (
       <Content className="userBasicSettings-content">
         <Row>
-          <Form
-            layout="vertical"
-            name="normal_reg"
-            className="reg-content-form"
-            initialValues={{ remember: true }}
-            onFinish={this.onFinish}
-          >
-            <Form.Item
-              label="用户昵称"
-              className="reg-content-form-userNameItem"
-              name="userName"
-              {...userNameItem}
+          <Col className="userBasicSettings-content-left" xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+            <Form
+              layout="vertical"
+              name="normal_reg"
+              className="reg-content-form"
+              initialValues={{ remember: true }}
+              onFinish={this.onFinish}
             >
-              <Input
-                className="reg-content-form-userNameInput"
-                placeholder="用户昵称"
-                value={userNameItem.value}
-                onChange={this.onUserNameChange}
-              />
-            </Form.Item>
-            <Form.Item
-              label="用户手机号"
-              className="reg-content-form-userNameItem"
-              name="userMobile"
-              {...userMobileItem}
-            >
-              <Input
-                className="reg-content-form-userNameInput"
-                placeholder="用户手机号"
-                value={userMobileItem.value}
-                onChange={this.onUserMobileChange}
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" className="reg-content-form-button">
-                保存
-              </Button>
-            </Form.Item>
-          </Form>
+              <Form.Item
+                label="用户昵称"
+                className="reg-content-form-userNameItem"
+                name="userName"
+                {...userNameItem}
+              >
+                <Input
+                  className="reg-content-form-userNameInput"
+                  placeholder="用户昵称"
+                  value={userNameItem.value}
+                  onChange={this.onUserNameChange}
+                />
+              </Form.Item>
+              <Form.Item
+                label="用户手机号"
+                className="reg-content-form-userNameItem"
+                name="userMobile"
+                {...userMobileItem}
+              >
+                <Input
+                  className="reg-content-form-userNameInput"
+                  placeholder="用户手机号"
+                  value={userMobileItem.value}
+                  onChange={this.onUserMobileChange}
+                />
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" className="reg-content-form-button">
+                  保存
+                </Button>
+              </Form.Item>
+            </Form>
+          </Col>
+          <Col className="userBasicSettings-content-right" xs={24} sm={24} md={12} lg={12} xl={12} xxl={12}>
+            <Col className="userBasicSettings-content-right-main" span={24}>
+              <Card actions={[
+                  <ImgCrop rotate>
+                    <Upload
+                      fileList={[]}
+                      {...uploadAvatar}>
+                      <Button icon={<UploadOutlined />}>上传头像</Button>
+                    </Upload>
+                  </ImgCrop>
+                ]}>
+                <Avatar className="userBasicSettings-content-right-avatar" src={resourcePath}/>
+              </Card>
+            </Col>
+          </Col>
         </Row>
       </Content>
     );
